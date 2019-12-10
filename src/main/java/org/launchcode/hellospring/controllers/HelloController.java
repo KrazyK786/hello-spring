@@ -3,6 +3,8 @@ package org.launchcode.hellospring.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @Controller
 @ResponseBody
 @RequestMapping("hello")
@@ -23,8 +25,15 @@ public class HelloController {
 
     // Handles request of the form /hello?name=LaunchCode
     @RequestMapping(method = {RequestMethod.GET,RequestMethod.POST}, value = "hello")
-    public String helloWithQueryParam(@RequestParam String name){
-        return "Hello, "+name+"!";
+    public String helloWithQueryParam(@RequestParam String name, @RequestParam String language){
+        HashMap<String,String> greetings = new HashMap<>();
+        greetings.put("eng","Hello");
+        greetings.put("jpn","Konichiwa");
+        greetings.put("frn","Bonjour");
+        greetings.put("spn","Hola");
+        greetings.put("swh","Jambo");
+        return greetings.get(language) + ", " + name + "!" +
+                "<br><br><a href='http://localhost:8080/hello/form'>Try Again!</a>";
     }
 
     // Handles request of the from /hello/LaunchCode
@@ -37,11 +46,11 @@ public class HelloController {
     public String helloForm(){
         return "<html>" +
                 "<body>" +
-                "<form action='hello' method='post'>" + // submit a request to /hello
+                "<form action='hello' method='get'>" + // submit a request to /hello
                 "<input type='text' name='name'>" +
                 "<select name='language'>" +
                 "<option value='eng'>English</option>" +
-                "<option value='jap'>Japanese</option>" +
+                "<option value='jpn'>Japanese</option>" +
                 "<option value='spn'>Spanish</option>" +
                 "<option value='frn'>French</option>" +
                 "<option value='swh'>Swahili</option>" +
